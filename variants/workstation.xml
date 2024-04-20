@@ -1,0 +1,13 @@
+<image>
+	<profiles>
+		<profile name="DesktopExcludes" description="Desktop packages to be excluded"/>
+		<profile name="KDE-Generic" description="Cloud KDE Generic image">
+			<requires profile="Base-Generic"/>
+			<requires profile="KDE-Desktop"/>
+			<requires profile="DesktopExcludes"/>
+		</profile>
+	</profiles>
+	<packages type="image" patternType="plusRecommended" profiles="DesktopExcludes">
+		<ignore name="firewall-*"/>
+	</packages>
+</image>

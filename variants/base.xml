@@ -1,0 +1,220 @@
+<image>
+	<profiles>
+		<profile name="CloudCore" description="Cloud spin core packages">
+			<requires profile="BootCore"/>
+		</profile>
+		<profile name="CloudCoreUKI" description="Cloud spin core packages for UKI">
+			<requires profile="BootCoreUKI"/>
+		</profile>
+		<profile name="Base-Azure" description="Azure Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Base-AmazonEC2" description="Amazon EC2 HVM Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Base-GCE" description="GCE Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Base-Generic" description="Generic Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Base-UEFI-UKI" description="UEFI Base Guest Image using UKIs">
+			<requires profile="CloudCoreUKI"/>
+		</profile>
+		<profile name="Base-OpenStack" description="OpenStack Base Guest Image">
+			<requires profile="Base-Generic"/>
+		</profile>
+		<profile name="Base-Oracle" description="Oracle Cloud Base Guest Image">
+			<requires profile="Base-Generic"/>
+		</profile>
+	</profiles>
+	<preferences profiles="Base-Azure" arch="x86_64,aarch64">
+		<type image="oem" format="vhd-fixed" formatoptions="force_size"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="false" fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8 earlyprintk=ttyS0"
+		      devicepersistency="by-uuid"
+		      bootpartition="true" bootpartsize="1000" bootfilesystem="ext4" efipartsize="100" firmware="uefi"
+		      rootfs_label="fedora"
+		      >
+			<bootloader name="grub2" console="serial" timeout="0"/>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<size unit="G">20</size>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Base-AmazonEC2" arch="x86_64,aarch64">
+		<type image="oem"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="false" fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8"
+		      devicepersistency="by-uuid"
+		      bootpartition="true" bootpartsize="1000" bootfilesystem="ext4" efipartsize="100" firmware="uefi"
+		      rootfs_label="fedora"
+		      >
+			<bootloader name="grub2" timeout="0"/>
+			<size unit="G">20</size>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Base-GCE" arch="x86_64,aarch64">
+		<type image="oem" format="gce"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="false" fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=ttyS0,38400n8d"
+		      devicepersistency="by-uuid"
+		      bootpartition="true" bootpartsize="1000" bootfilesystem="ext4" efipartsize="100" firmware="uefi"
+		      rootfs_label="fedora"
+		      >
+			<bootloader name="grub2" timeout="0"/>
+			<!-- GCP engineers have told us the disk images have bad performance if they are anything less than 10G -->
+			<size unit="G">20</size>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Base-Generic" arch="x86_64,aarch64">
+		<type image="oem" format="qcow2"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="false" fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8"
+		      devicepersistency="by-uuid"
+		      bootpartition="true" bootpartsize="1000" bootfilesystem="ext4" efipartsize="100" firmware="uefi"
+		      rootfs_label="fedora"
+		      >
+			<bootloader name="grub2" console="serial" timeout="0"/>
+			<size unit="G">20</size>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Base-Generic" arch="ppc64le">
+		<type image="oem" format="qcow2"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="false" fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8"
+		      devicepersistency="by-uuid" target_blocksize="4096"
+		      bootpartition="true" bootpartsize="1000" bootfilesystem="ext4" firmware="ofw"
+		      rootfs_label="fedora"
+		      >
+			<bootloader name="grub2" console="serial" timeout="0"/>
+			<size unit="G">20</size>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Base-Generic" arch="s390x">
+		<type image="oem" format="qcow2"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="false" fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8 dasd_mod.dasd=ipldev"
+		      devicepersistency="by-uuid" target_blocksize="4096"
+		      bootpartition="true" bootpartsize="1000" bootfilesystem="ext4"
+		      rootfs_label="fedora"
+		      >
+			<bootloader name="zipl" targettype="CDL" timeout="1"/>
+			<size unit="G">20</size>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Base-UEFI-UKI" arch="x86_64,aarch64">
+		<type image="oem" format="qcow2"
+		      firmware="uefi" efipartsize="1000"
+		      bootpartition="false"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="true"
+		      devicepersistency="by-uuid"
+		      rootfs_label="fedora"
+		      initrd_system="none"
+		      editbootconfig="uki-editbootconfig.sh"
+		      >
+			<bootloader name="custom"/>
+			<size unit="G">20</size>
+			<systemdisk>
+				<volume name="@root=root"/>
+				<volume name="home" parent="/"/>
+				<volume name="var" parent="/"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<packages type="bootstrap" patternType="plusRecommended" profiles="CloudCore,CloudCoreUKI">
+		<package name="fedora-release-cloud"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="CloudCore">
+		<namedCollection name="cloud-server-environment"/>
+		<ignore name="dracut-config-rescue"/>
+		<ignore name="firewalld*"/>
+		<ignore name="kernel"/>
+		<ignore name="*-firmware"/>
+		<ignore name="geolite2-city"/>
+		<ignore name="geolite2-country"/>
+		<ignore name="plymouth*"/>
+		<package name="python3-dnf-plugin-tracer"/>
+		<package name="glibc-langpack-en"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="CloudCoreUKI">
+		<namedCollection name="cloud-server-environment"/>
+		<ignore name="dracut-config-rescue"/>
+		<ignore name="firewalld"/>
+		<ignore name="kernel"/>
+		<ignore name="[a-oq-z]*-firmware"/>
+		<ignore name="geolite2-city"/>
+		<ignore name="geolite2-country"/>
+		<ignore name="plymouth"/>
+		<package name="python3-dnf-plugin-tracer"/>
+		<package name="glibc-langpack-en"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="Base-Azure">
+		<package name="WALinuxAgent"/>
+		<package name="kernel-modules"/>
+		<package name="hyperv-daemons"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="Base-GCE">
+		<package name="google-compute-engine-guest-configs"/>
+		<package name="google-compute-engine-oslogin"/>
+		<package name="google-guest-agent"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="Base-Generic">
+		<package name="qemu-guest-agent"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="Base-UEFI-UKI">
+		<package name="qemu-guest-agent"/>
+	</packages>
+	<packages type="uninstall" profiles="Base-GCE">
+		<package name="cloud-init"/>
+	</packages>
+</image>

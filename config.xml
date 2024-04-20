@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<image schemaversion="7.4" name="Fedora-Cloud">
+	<description type="system">
+		<author>Neal Gompa</author>
+		<contact>neal@gompa.dev</contact>
+		<specification>Fedora Cloud</specification>
+	</description>
+	<preferences>
+		<version>Rawhide</version>
+		<packagemanager>dnf5</packagemanager>
+		<locale>en_US</locale>
+		<keytable>us</keytable>
+		<timezone>UTC</timezone>
+		<release-version>rawhide</release-version>
+	</preferences>
+	<include from="this://./fedora-kiwi-descriptions/repositories/core.xml"/>
+	<include from="this://./fedora-kiwi-descriptions/components/boot.xml"/>
+	<include from="this://./fedora-kiwi-descriptions/components/desktops/common.xml"/>
+	<include from="this://./fedora-kiwi-descriptions/components/desktops/kde.xml"/>
+	<include from="this://./fedora-kiwi-descriptions/components/users.xml"/>
+	<include from="this://./variants/base.xml"/>
+	<include from="this://./variants/workstation.xml"/>
+	<packages type="bootstrap">
+		<package name="basesystem"/>
+		<package name="filesystem"/>
+	</packages>
+</image>

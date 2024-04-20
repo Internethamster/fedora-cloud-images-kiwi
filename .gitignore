@@ -1,0 +1,9 @@
+public/
+tmpoutput/
+doc/index.md
+*.box
+*.iso
+*.tar.xz
+*.vmdk
+*.raw
+*.qcow2

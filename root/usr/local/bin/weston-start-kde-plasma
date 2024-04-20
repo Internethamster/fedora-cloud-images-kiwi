@@ -1,0 +1,31 @@
+#!/bin/sh
+
+## Runs KDE Plasma in Weston
+
+CONFIG_FILE=$(mktemp --suffix="-wl-weston-kdeplasma-ini")
+RUN_SCRIPT=$(mktemp --suffix="-wl-weston-kdeplasma-run")
+EXIT_CODE_SAVE=$(mktemp --suffix="-wl-weston-kdeplasma-exit")
+
+cat > ${CONFIG_FILE} << EOF
+[core]
+shell=kiosk
+xwayland=false
+
+[autolaunch]
+path=${RUN_SCRIPT}
+watch=true
+EOF
+
+cat > ${RUN_SCRIPT} << EOF
+#!/bin/sh
+/usr/libexec/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland
+echo $? > ${EXIT_CODE_SAVE}
+EOF
+
+chmod +x ${RUN_SCRIPT}
+
+weston --config=${CONFIG_FILE} --socket=wl-kdeplasma-0
+exit_code=$(< ${EXIT_CODE_SAVE})
+
+rm ${CONFIG_FILE} ${RUN_SCRIPT} ${EXIT_CODE_SAVE}
+exit $exit_code
