@@ -20,6 +20,7 @@
 	<include from="this://./fedora-kiwi-descriptions/components/desktops/kde.xml"/>
 	<include from="this://./fedora-kiwi-descriptions/components/users.xml"/>
 	<include from="this://./variants/base.xml"/>
+	<include from="this://./variants/container.xml"/>
 	<include from="this://./variants/workstation.xml"/>
 	<packages type="bootstrap">
 		<package name="basesystem"/>
